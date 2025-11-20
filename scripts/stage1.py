@@ -9,8 +9,7 @@ import numpy as np
 import sklearn.metrics as metrics
 from torchsummary import summary
 from tqdm import tqdm
-import os
-import time  # <--- 1. IMPORTAR A BIBLIOTECA TIME
+import time  
 
 # Model definition
 class CNN_simples(nn.Module):
@@ -231,56 +230,25 @@ def main():
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
     max_epochs = 50
-    model_save_path = "best_stage_1.pth"
-
-    # Logic: Load existing or Train new
-    if os.path.exists(model_save_path):
-        print(f"Found saved model at {model_save_path}. Loading...")
-        summary(model, input_size=(3, 32, 32))
-        
-        model.load_state_dict(torch.load(model_save_path))
-        model.eval()
-        
-        # Check validation accuracy of loaded model
-        loss, acc = validation(model, val_loader, criterion, device)
-        print(f"Loaded model Validation Accuracy: {acc:.2f}%")
-
-        # Generate Confusion Matrix
-        all_preds = []
-        all_labels = []
-        print("Generating confusion matrix...")
-        with torch.no_grad():
-            for inputs, labels in test_loader:
-                inputs, labels = inputs.to(device), labels.to(device)
-                outputs = model(inputs)
-                _, preds = outputs.max(1)
-                all_preds.extend(preds.cpu().numpy())
-                all_labels.extend(labels.cpu().numpy())
-        
-        cm = metrics.confusion_matrix(all_labels, all_preds)
-        plot_confusion_matrix(cm, class_names)
-
-    else:
-        print("No saved model found. Training from scratch...")
-        summary(model, input_size=(3, 32, 32))
-        
-        # Train and Plot
-        train(model, train_loader, val_loader, optimizer, criterion, max_epochs, device, model_save_path)
-        
-        # Generate Confusion Matrix after training
-        print("Generating confusion matrix on Test set...")
-        all_preds = []
-        all_labels = []
-        with torch.no_grad():
-            for inputs, labels in test_loader:
-                inputs, labels = inputs.to(device), labels.to(device)
-                outputs = model(inputs)
-                _, preds = outputs.max(1)
-                all_preds.extend(preds.cpu().numpy())
-                all_labels.extend(labels.cpu().numpy())
-        
-        cm = metrics.confusion_matrix(all_labels, all_preds)
-        plot_confusion_matrix(cm, class_names)
+    model_save_path = "models/best_stage_1.pth"
+       
+    # Train and Plot
+    train(model, train_loader, val_loader, optimizer, criterion, max_epochs, device, model_save_path)
+    
+    # Generate Confusion Matrix after training
+    print("Generating confusion matrix on Test set...")
+    all_preds = []
+    all_labels = []
+    with torch.no_grad():
+        for inputs, labels in test_loader:
+            inputs, labels = inputs.to(device), labels.to(device)
+            outputs = model(inputs)
+            _, preds = outputs.max(1)
+            all_preds.extend(preds.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
+    
+    cm = metrics.confusion_matrix(all_labels, all_preds)
+    plot_confusion_matrix(cm, class_names)
 
     # <--- 7. CÁLCULO DO TEMPO TOTAL E PRINT FINAL
     script_end = time.time()
