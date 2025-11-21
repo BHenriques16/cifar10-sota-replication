@@ -58,7 +58,7 @@ class CNN_Width(nn.Module):
         return x
 
 
-# depth scaling: add 2 blocks-
+# depth scaling: add 2 blocks
 class CNN_Depth(nn.Module):
     def __init__(self):
         super(CNN_Depth, self).__init__()
@@ -201,18 +201,15 @@ def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, dev
 
     print(f"\nStarting training on {device}...")
     
-    # <--- 2. INÍCIO DO TEMPO TOTAL DE TREINO
     total_train_start = time.time() 
 
     for epoch in range(max_epochs):
         
-        # <--- 3. INÍCIO DO TEMPO DA ÉPOCA
         epoch_start = time.time() 
         
         train_loss, train_acc = train_one_epoch(model, train_loader, optimizer, criterion, epoch, max_epochs, device)
         val_loss, val_acc = validation(model, val_loader, criterion, device)
         
-        # <--- 4. FIM DO TEMPO DA ÉPOCA
         epoch_end = time.time()
         epoch_duration = epoch_end - epoch_start
         
@@ -221,7 +218,7 @@ def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, dev
         val_losses.append(val_loss)
         val_accuracies.append(val_acc)
 
-        # Adicionei a info de tempo no print
+        # Epoch result
         print(f"Val Loss: {val_loss:.4f}  Train Loss: {train_loss:.4f}  Val Acc: {val_acc:.2f}%  Train Acc: {train_acc:.2f}% | Time: {epoch_duration:.2f}s")
 
         if val_acc > best_acc:
@@ -229,7 +226,6 @@ def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, dev
             torch.save(model.state_dict(), model_save_path)
             print(f"--> Best model saved with acc: {best_acc:.2f}%")
     
-    # <--- 5. FIM DO TEMPO TOTAL DE TREINO
     total_train_end = time.time()
     total_train_duration = total_train_end - total_train_start
     print(f"\nTraining finished in {total_train_duration // 60:.0f}m {total_train_duration % 60:.0f}s")
@@ -284,7 +280,7 @@ def main():
     val_loader = DataLoader(val_dataset, batch_size=64, shuffle=False, num_workers=2, pin_memory=True)
     test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False, num_workers=2, pin_memory=True)
 
-    # --- EXPERIMENT 1: WIDTH SCALING ---
+    # Stage 2: Witdth scaling
     print("\n" + "="*40)
     print("  STARTING STAGE 2: WIDTH SCALING")
     print("="*40)
@@ -298,7 +294,7 @@ def main():
     train(model_width, train_loader, val_loader, optimizer_width, criterion, 
           max_epochs=50, device=device, model_save_path="models/best_stage2_width.pth")
 
-    # --- EXPERIMENT 2: DEPTH SCALING ---
+    # Stage 2: Depth scaling
     print("\n" + "="*40)
     print("  STARTING STAGE 2: DEPTH SCALING")
     print("="*40)
@@ -306,7 +302,7 @@ def main():
     model_depth = CNN_Depth().to(device)
     summary(model_depth, input_size=(3, 32, 32))
     
-    optimizer_depth = optim.Adam(model_depth.parameters(), lr=0.001) # Reset optimizer for new model
+    optimizer_depth = optim.Adam(model_depth.parameters(), lr=0.001)
     
     train(model_depth, train_loader, val_loader, optimizer_depth, criterion, 
           max_epochs=50, device=device, model_save_path="models/best_stage2_depth.pth")
