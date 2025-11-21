@@ -11,6 +11,7 @@ from torchsummary import summary
 from tqdm import tqdm
 import time  
 
+
 # Model definition
 class CNN_simples(nn.Module):
     def __init__(self):
