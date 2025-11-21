@@ -42,7 +42,7 @@ class CNN_simples(nn.Module):
         self.fc = nn.Sequential(
             nn.Linear(128*4*4, 256),
             nn.ReLU(),
-            nn.Linear(256, 10) 
+            nn.Linear(256, 10)  # CIFAR-10, has 10 classes
         )
 
     def forward(self, x):
