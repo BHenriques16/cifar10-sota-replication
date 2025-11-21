@@ -9,7 +9,7 @@ import numpy as np
 import sklearn.metrics as metrics
 from torchsummary import summary
 from tqdm import tqdm
-import time  
+import time
 
 # Model definition
 class CNN_simples(nn.Module):
