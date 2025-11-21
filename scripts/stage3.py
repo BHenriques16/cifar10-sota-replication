@@ -11,11 +11,8 @@ import os
 import time
 from tqdm import tqdm
 
+# Implementation of a Residual Block
 class ResidualBlock(nn.Module):
-    """
-    Implementation of a Residual Block with Skip Connection.
-    Structure: Input -> Conv -> BN -> ReLU -> Conv -> BN -> (+ Input) -> ReLU
-    """
     def __init__(self, in_channels, out_channels, stride=1):
         super(ResidualBlock, self).__init__()
         
@@ -29,9 +26,6 @@ class ResidualBlock(nn.Module):
                                stride=1, padding=1, bias=False)
         self.bn2 = nn.BatchNorm2d(out_channels)
         
-        # Shortcut path (Skip Connection) [cite: 41]
-        # If input/output shapes differ (due to stride or channel change), 
-        # we need to adapt the identity x using a 1x1 conv
         self.shortcut = nn.Sequential()
         if stride != 1 or in_channels != out_channels:
             self.shortcut = nn.Sequential(
@@ -49,7 +43,7 @@ class ResidualBlock(nn.Module):
         out = self.conv2(out)
         out = self.bn2(out)
         
-        # Add the residual (skip connection)
+        # Add the residual
         out += self.shortcut(identity)
         out = self.relu(out)
         
@@ -67,13 +61,13 @@ class ModernCNN(nn.Module):
         # Stage 1: 32 channels (32x32 size)
         self.layer1 = ResidualBlock(32, 32, stride=1)
         
-        # Stage 2: 64 channels (16x16 size) - Downsampling via stride=2
+        # Stage 2: 64 channels (16x16 size)
         self.layer2 = ResidualBlock(32, 64, stride=2)
         
-        # Stage 3: 128 channels (8x8 size) - Downsampling via stride=2
+        # Stage 3: 128 channels (8x8 size)
         self.layer3 = ResidualBlock(64, 128, stride=2)
         
-        # Stage 4: 256 channels (4x4 size) - Downsampling via stride=2
+        # Stage 4: 256 channels (4x4 size)
         self.layer4 = ResidualBlock(128, 256, stride=2)
         
         # Classification Head
@@ -81,7 +75,7 @@ class ModernCNN(nn.Module):
         self.avg_pool = nn.AdaptiveAvgPool2d((1, 1)) 
         self.flatten = nn.Flatten()
         
-        # Dropout for Regularization [cite: 51]
+        # Dropout for Regularization
         self.dropout = nn.Dropout(0.3) 
         self.fc = nn.Linear(256, 10)
 
@@ -99,7 +93,6 @@ class ModernCNN(nn.Module):
         out = self.fc(out)
         return out
     
-
 # One epoch train
 def train_one_epoch(model, train_loader, optimizer, criterion, epoch, max_epochs, device):
     model.train()
@@ -182,18 +175,15 @@ def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, dev
 
     print(f"\nStarting training on {device}...")
     
-    # <--- 2. INÍCIO DO TEMPO TOTAL DE TREINO
     total_train_start = time.time() 
 
     for epoch in range(max_epochs):
         
-        # <--- 3. INÍCIO DO TEMPO DA ÉPOCA
         epoch_start = time.time() 
         
         train_loss, train_acc = train_one_epoch(model, train_loader, optimizer, criterion, epoch, max_epochs, device)
         val_loss, val_acc = validation(model, val_loader, criterion, device)
         
-        # <--- 4. FIM DO TEMPO DA ÉPOCA
         epoch_end = time.time()
         epoch_duration = epoch_end - epoch_start
         
@@ -202,7 +192,7 @@ def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, dev
         val_losses.append(val_loss)
         val_accuracies.append(val_acc)
 
-        # Adicionei a info de tempo no print
+        # Epoch result 
         print(f"Val Loss: {val_loss:.4f}  Train Loss: {train_loss:.4f}  Val Acc: {val_acc:.2f}%  Train Acc: {train_acc:.2f}% | Time: {epoch_duration:.2f}s")
 
         if val_acc > best_acc:
@@ -210,7 +200,6 @@ def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, dev
             torch.save(model.state_dict(), model_save_path)
             print(f"--> Best model saved with acc: {best_acc:.2f}%")
     
-    # <--- 5. FIM DO TEMPO TOTAL DE TREINO
     total_train_end = time.time()
     total_train_duration = total_train_end - total_train_start
     print(f"\nTraining finished in {total_train_duration // 60:.0f}m {total_train_duration % 60:.0f}s")
@@ -246,7 +235,7 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
-    # --- DATA AUGMENTATION (Requirement [cite: 45, 69]) ---
+    # Data augmentation
     # More aggressive transforms for the training set
     train_transform = transforms.Compose([
         transforms.RandomCrop(32, padding=4), # Shift image slightly
@@ -263,12 +252,10 @@ def main():
 
     full_dataset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=train_transform)
     
-    # Split carefully to keep transforms correct (Usually split first, but for simplicity in this TP flow:)
     train_size = int(0.8 * len(full_dataset))
     val_size = len(full_dataset) - train_size
     
-    # Note: In a perfect scenario, Val set shouldn't have RandomCrop, 
-    # but splitting a Dataset object inherits transforms. For TP1 this is usually acceptable.
+
     train_dataset, val_dataset = random_split(full_dataset, [train_size, val_size])
     
     test_dataset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=test_transform)
@@ -276,7 +263,7 @@ def main():
     train_loader = DataLoader(train_dataset, batch_size=128, shuffle=True, num_workers=2, pin_memory=True)
     val_loader = DataLoader(val_dataset, batch_size=128, shuffle=False, num_workers=2, pin_memory=True)
 
-    # --- SETUP MODERN MODEL ---
+    # Stage 3: Modern CNN
     print("\n" + "="*40)
     print("  STARTING STAGE 3: MODERN CNN")
     print("="*40)
@@ -284,15 +271,12 @@ def main():
     model = ModernCNN().to(device)
     summary(model, input_size=(3, 32, 32))
     
-    # --- LABEL SMOOTHING (Requirement ) ---
-    # Instead of standard CrossEntropy, we use label_smoothing parameter
+    # CrossEntropy with label_smoothing parameter
     criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
     
-    # Optimizer with Weight Decay (L2 Regularization) [cite: 52]
+    # Optimizer with Weight Decay (L2 Regularization)
     optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
     
-    # Scheduler (Optional but good for SOTA) - Reduce LR if loss stops dropping
-    # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5)
     
     train(model, train_loader, val_loader, optimizer, criterion, 
           max_epochs=50, device=device, model_save_path="models/best_stage3_modern.pth")
