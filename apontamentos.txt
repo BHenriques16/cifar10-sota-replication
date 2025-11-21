@@ -1,0 +1,13 @@
+Stage 1, tempo de execução do treino: 40m 10s   (700 mil parametros)
+Val Loss: 2.5320  Train Loss: 0.0528  Val Acc: 74.78%  Train Acc: 98.46% | Time: 58.07s
+
+Stage 2: 
+-> Width scaling, dobro dos canais, aumento considerável de parâmetros (para 3 milhões), tempo de execução do treino: 41m 22s
+Val Loss: 2.8504  Train Loss: 0.0541  Val Acc: 74.47%  Train Acc: 98.66% | Time: 48.75s
+
+-> Depth Scaling, mais 2 blocos (841 mil parametreos), tempo de execução de treino: 38m 30s
+Val Loss: 2.1125  Train Loss: 0.0798  Val Acc: 73.03%  Train Acc: 97.51% | Time: 28.09s
+
+
+Stage 3: 1M 228mil parâmetros, tempo de execução: 35m 50s
+Val Loss: 0.7930  Train Loss: 0.6684  Val Acc: 88.45%  Train Acc: 94.11% | Time: 30.46s
