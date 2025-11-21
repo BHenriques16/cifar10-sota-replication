@@ -129,24 +129,22 @@ def plot_confusion_matrix(cm, class_names):
     plt.tight_layout()
     plt.show()
 
+# Training function
 def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, device, model_save_path):
     best_acc = 0.0
     train_losses, val_losses, train_accuracies, val_accuracies = [], [], [], []
 
     print(f"\nStarting training on {device}...")
     
-    # <--- 2. INÍCIO DO TEMPO TOTAL DE TREINO
     total_train_start = time.time() 
 
     for epoch in range(max_epochs):
         
-        # <--- 3. INÍCIO DO TEMPO DA ÉPOCA
         epoch_start = time.time() 
         
         train_loss, train_acc = train_one_epoch(model, train_loader, optimizer, criterion, epoch, max_epochs, device)
         val_loss, val_acc = validation(model, val_loader, criterion, device)
         
-        # <--- 4. FIM DO TEMPO DA ÉPOCA
         epoch_end = time.time()
         epoch_duration = epoch_end - epoch_start
         
@@ -155,7 +153,7 @@ def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, dev
         val_losses.append(val_loss)
         val_accuracies.append(val_acc)
 
-        # Adicionei a info de tempo no print
+        # Epoch results
         print(f"Val Loss: {val_loss:.4f}  Train Loss: {train_loss:.4f}  Val Acc: {val_acc:.2f}%  Train Acc: {train_acc:.2f}% | Time: {epoch_duration:.2f}s")
 
         if val_acc > best_acc:
@@ -163,7 +161,6 @@ def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, dev
             torch.save(model.state_dict(), model_save_path)
             print(f"--> Best model saved with acc: {best_acc:.2f}%")
     
-    # <--- 5. FIM DO TEMPO TOTAL DE TREINO
     total_train_end = time.time()
     total_train_duration = total_train_end - total_train_start
     print(f"\nTraining finished in {total_train_duration // 60:.0f}m {total_train_duration % 60:.0f}s")
@@ -195,7 +192,6 @@ def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, dev
 
 #   MAIN
 def main():
-    # <--- 6. INÍCIO DO TEMPO TOTAL DO SCRIPT
     script_start = time.time()
 
     # Configuration
@@ -250,7 +246,6 @@ def main():
     cm = metrics.confusion_matrix(all_labels, all_preds)
     plot_confusion_matrix(cm, class_names)
 
-    # <--- 7. CÁLCULO DO TEMPO TOTAL E PRINT FINAL
     script_end = time.time()
     total_duration = script_end - script_start
     print(f"\n=== Total execution time: {total_duration // 60:.0f}m {total_duration % 60:.0f}s ===")
