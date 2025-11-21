@@ -295,7 +295,7 @@ def main():
     # scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5)
     
     train(model, train_loader, val_loader, optimizer, criterion, 
-          max_epochs=50, device=device, model_save_path="best_stage3_modern.pth")
+          max_epochs=50, device=device, model_save_path="models/best_stage3_modern.pth")
 
 if __name__ == "__main__":
     main()
