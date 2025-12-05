@@ -12,6 +12,7 @@ The libraries used to build the project are in the requiremnts.txt file
 
 ## Project Structure
 
+``` text
 ├── models/               # Directory to save trained model weights (.pth)
 ├── scripts/
 │   ├── stage1.py         # Baseline CNN implementation (<1M params)
