@@ -13,16 +13,16 @@ The libraries used to build the project are in the requiremnts.txt file
 ## Project Structure
 
 ``` text
-├── models/               # Directory to save trained model weights (.pth)
+├── models/                             # Directory to save trained model weights (.pth)
 ├── scripts/
-│   ├── stage1.py         # Baseline CNN implementation (<1M params)
-│   ├── stage1_experiments.py # Theoretical analysis: Linear Collapse & Bottlenecks
-│   ├── stage2.py         # Scaling: Width vs. Depth comparison
-│   ├── stage2_experiments.py # Failure analysis: Vanishing Gradient & Overfitting
-│   ├── stage3.py         # Modern CNN: ResBlocks, BatchNorm, Regularization
-│   ├── stage4.py         # SOTA Reproduction: ResNet-18 (CIFAR-adapted)
-│   ├── stage5.py         # Improved SOTA: SE-ResNet + MixUp + Cutout
-│   └── stage5_experiments.py # Ablation studies for Stage 5
+│   ├── stage1.py                       # Baseline CNN implementation (<1M params)
+│   ├── stage1_experiments.py           # Theoretical analysis: Linear Collapse & Bottlenecks
+│   ├── stage2.py                       # Scaling: Width vs. Depth comparison
+│   ├── stage2_experiments.py           # Failure analysis: Vanishing Gradient & Overfitting
+│   ├── stage3.py                       # Modern CNN: ResBlocks, BatchNorm, Regularization
+│   ├── stage4.py                       # SOTA Reproduction: ResNet-18 (CIFAR-adapted)
+│   ├── stage5.py                       # Improved SOTA: SE-ResNet + MixUp + Cutout
+│   └── stage5_experiments.py           # Ablation studies for Stage 5
 └── README.md
 ```
 
