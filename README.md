@@ -24,6 +24,7 @@ The libraries used to build the project are in the requiremnts.txt file
 │   ├── stage5.py         # Improved SOTA: SE-ResNet + MixUp + Cutout
 │   └── stage5_experiments.py # Ablation studies for Stage 5
 └── README.md
+```
 
 ## Project Roadmap & Stages
 
