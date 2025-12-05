@@ -29,35 +29,35 @@ The libraries used to build the project are in the requiremnts.txt file
 ##  Project Roadmap & Stages
 
 ### Stage 1: Baseline CNN & Measurement Framework
-**Goal:** Implement a lightweight CNN with **< 1 Million parameters** to establish a performance baseline [cite: 27-28].
+**Goal:** Implement a lightweight CNN with **< 1 Million parameters** to establish a performance baseline.
 * **Architecture:** Basic stack of `Conv2d` -> `ReLU` -> `MaxPool` layers.
-* **Deliverables:** Accuracy curves, confusion matrix, and parameter count analysis [cite: 29-33].
-* **Theory Checkpoint:** Investigation of representational power by removing non-linearities (*Linear Collapse Experiment*) [cite: 34-38].
+* **Deliverables:** Accuracy curves, confusion matrix, and parameter count analysis.
+* **Theory Checkpoint:** Investigation of representational power by removing non-linearities (*Linear Collapse Experiment*).
 
 ### Stage 2: Architecture Scaling & Diagnostics
-**Goal:** Analyze the impact of scaling network dimensions independently [cite: 40-41].
+**Goal:** Analyze the impact of scaling network dimensions independently.
 * **Experiments:**
     * **Width Scaling:** Doubling the number of channels/filters in all layers.
     * **Depth Scaling:** Adding additional convolutional blocks without pooling.
-* **Diagnostics:** Analysis of overfitting behavior and optimization stability [cite: 45-52].
+* **Diagnostics:** Analysis of overfitting behavior and optimization stability.
 * **Stress Tests:** Provoking **Vanishing Gradients** via extreme depth and **Parameter Explosion** via extreme width.
 
 ### Stage 3: Modern CNN Components
-**Goal:** Stabilize training and mitigate overfitting using modern deep learning techniques [cite: 53-59].
+**Goal:** Stabilize training and mitigate overfitting using modern deep learning techniques.
 * **Architecture Upgrades:** Introduction of **Residual Connections** and **Batch Normalization**.
 * **Regularization:** Implementation of Label Smoothing, Dropout, and Weight Decay.
 * **Outcome:** Significant improvement in convergence speed and generalization.
 
 ### Stage 4: Reproduce a SOTA CIFAR-10 CNN
-**Goal:** Rigorous reproduction of a standard industry benchmark from scratch [cite: 73-76].
+**Goal:** Rigorous reproduction of a standard industry benchmark from scratch.
 * **Model:** **ResNet-18** (adapted for CIFAR-10 input size).
-* **Training Recipe:** SGD with Momentum (0.9) and **Cosine Annealing Scheduler** for 200 epochs [cite: 82-86].
-* **Target:** Achieve >93% accuracy (within 3.0 points of literature) [cite: 88-89].
+* **Training Recipe:** SGD with Momentum (0.9) and **Cosine Annealing Scheduler** for 200 epochs.
+* **Target:** Achieve >93% accuracy (within 3.0 points of literature).
 
 ### Stage 5: Surpass the SOTA Model
-**Goal:** Implement architectural and training enhancements to beat the Stage 4 baseline [cite: 96-98].
+**Goal:** Implement architectural and training enhancements to beat the Stage 4 baseline.
 * **Enhancements Implemented:**
     * **Architecture:** **Squeeze-and-Excitation (SE) Blocks** for dynamic channel feature recalibration.
     * **Data Augmentation:** **MixUp** (training on convex combinations of image pairs).
     * **Regularization:** **Cutout** (Erasure-based augmentation).
-* **Ablation Studies:** Systematic removal of components (No-MixUp, No-SE, No-Cutout) to quantify individual contributions [cite: 133-137].
+* **Ablation Studies:** Systematic removal of components (No-MixUp, No-SE, No-Cutout) to quantify individual contributions.
