@@ -10,8 +10,6 @@ from tqdm import tqdm
 import time
 from torchsummary import summary
 
-# --- 1. MODEL FOR EXPERIMENT: LINEAR COLLAPSE ---
-
 class CNN_Linear(nn.Module):
     def __init__(self):
         super(CNN_Linear, self).__init__()
@@ -48,8 +46,6 @@ class CNN_Linear(nn.Module):
         x = self.fc(x)
         return x
 
-# --- 2. TRAINING HELPER ---
-
 def train_experiment(model, name, train_loader, val_loader, device, epochs):
     print(f"\n--- Running Experiment: {name} ---")
     criterion = nn.CrossEntropyLoss()
@@ -67,7 +63,6 @@ def train_experiment(model, name, train_loader, val_loader, device, epochs):
     for epoch in range(epochs):
         epoch_start = time.time()
         
-        # --- TRAINING PHASE ---
         model.train()
         running_loss = 0.0
         correct = 0
@@ -93,7 +88,6 @@ def train_experiment(model, name, train_loader, val_loader, device, epochs):
         epoch_train_loss = running_loss / len(train_loader)
         epoch_train_acc = 100 * correct / total
         
-        # --- VALIDATION PHASE ---
         model.eval()
         val_running_loss = 0.0
         val_correct = 0
@@ -125,8 +119,7 @@ def train_experiment(model, name, train_loader, val_loader, device, epochs):
     print(f"Experiment Finished. Total Time: {(time.time() - total_start)/60:.2f} minutes.")
     return history
 
-# --- 3. MAIN ---
-
+# MAIN
 def main():
     torch.backends.cudnn.benchmark = True 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

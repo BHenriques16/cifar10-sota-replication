@@ -190,7 +190,7 @@ def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, dev
     
     plt.show()
 
-#   MAIN
+#  MAIN
 def main():
     script_start = time.time()
 
