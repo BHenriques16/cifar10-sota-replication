@@ -1,9 +1,0 @@
-torch
-torchvision
-matplotlib
-numpy
-torchsummary
-matplotlib
-time
-scikit-learn
-tqdm
