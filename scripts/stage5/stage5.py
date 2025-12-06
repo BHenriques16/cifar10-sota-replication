@@ -11,7 +11,6 @@ import time
 from tqdm import tqdm
 import os
 
-
 class Cutout(object):
     def __init__(self, n_holes, length):
         self.n_holes = n_holes
@@ -41,7 +40,6 @@ class Cutout(object):
         return img
 
 def mixup_data(x, y, alpha=1.0, use_cuda=True):
-    '''Returns mixed inputs, pairs of targets, and lambda'''
     if alpha > 0:
         lam = np.random.beta(alpha, alpha)
     else:

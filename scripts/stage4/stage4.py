@@ -11,8 +11,6 @@ import time
 from tqdm import tqdm
 import os
 
-# --- 1. HELPER FUNCTIONS ---
-
 def train_one_epoch(model, train_loader, optimizer, criterion, epoch, max_epochs, device):
     model.train()
     running_loss = 0.0
@@ -64,9 +62,6 @@ def validation(model, val_loader, criterion, device):
     return epoch_loss, epoch_acc
 
 def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, device, model_save_path, scheduler=None):
-    """
-    Updated Train loop with Time Tracking
-    """
     best_acc = 0.0
     train_losses, val_losses, train_accuracies, val_accuracies = [], [], [], []
 
@@ -235,7 +230,7 @@ def main():
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2, pin_memory=True)
     test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2, pin_memory=True)
 
-    # model setup
+    # Model setup
     print("\n" + "="*40)
     print("  STARTING STAGE 4: RESNET-18 REPRODUCTION")
     print("="*40)

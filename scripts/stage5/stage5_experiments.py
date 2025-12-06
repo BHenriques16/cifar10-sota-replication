@@ -156,7 +156,6 @@ class SEResNet(nn.Module):
         out = self.linear(out)
         return out
 
-
 def train_one_epoch_normal(model, train_loader, optimizer, criterion, epoch, max_epochs, device):
     model.train()
     running_loss = 0.0
