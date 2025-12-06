@@ -11,3 +11,67 @@ Val Loss: 2.1125  Train Loss: 0.0798  Val Acc: 73.03%  Train Acc: 97.51% | Time:
 
 Stage 3: 1M 228mil parâmetros, tempo de execução: 35m 50s
 Val Loss: 0.7930  Train Loss: 0.6684  Val Acc: 88.45%  Train Acc: 94.11% | Time: 30.46s
+
+Stage 4: 11M 17mil, tempo de execução: 227.77 minutes.
+FINAL TEST ACCURACY: 94.48%
+
+
+Stage 5:
+-> Architecture Enhancement: Squeeze-and-Excitation (SE) Blocks.
+
+Why? SE blocks explicitly model channel interdependencies. They allow the network to perform feature recalibration (learning "which channels are more important"), improving representational power with minimal parameter increase.
+
+
+Training Enhancement: MixUp Augmentation.
+
+
+Why? MixUp trains the network on linear combinations of pairs of examples and their labels. This encourages the network to behave linearly in-between training examples, reducing overfitting and improving robustness.
+
+
+Regularization: Cutout (Está incluída na categoria "Erasure-based augmentations").
+
+Why? Randomly masking out square regions of the input during training forces the model to focus on less prominent features rather than relying on a specific visual cue (like a dog's ear).
+
+
+FINAL TEST ACCURACY: 95.96% (stage 5)
+Training Finished. Total Time: 153.35 minutes.
+
+Total params: 11,261,002
+Trainable params: 11,261,002
+Non-trainable params: 0
+----------------------------------------------------------------
+Input size (MB): 0.01
+Forward/backward pass size (MB): 17.42
+Params size (MB): 42.96
+Estimated Total Size (MB): 60.39
+
+Para o stage 5 deixar apenas 1 e retirar os 2
+
+Experiencia 1:
+Training Finished, with . Total Time: 150.26 mins.
+
+--- EXPERIMENT SETTINGS: Stage5_NoSEblocks ---
+USE_SE_BLOCKS: False
+USE_MIXUP:     True
+USE_CUTOUT:    True
+Device:        cuda
+
+
+Experiencia 2:
+Training Finished, with . Total Time: 170.28 mins.
+
+--- EXPERIMENT SETTINGS: Stage5_NoMixUp ---
+USE_SE_BLOCKS: True
+USE_MIXUP:     False
+USE_CUTOUT:    True
+Device:        cuda
+
+Expereiencia 3:
+Training Finished, with . Total Time: 183.39 mins.
+
+--- EXPERIMENT SETTINGS: Stage5_NoCutout ---
+USE_SE_BLOCKS: True
+USE_MIXUP:     True
+USE_CUTOUT:    False
+Device:        cuda
+------------------------------

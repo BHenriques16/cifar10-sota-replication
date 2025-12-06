@@ -11,7 +11,6 @@ from torchsummary import summary
 from tqdm import tqdm
 import time  
 
-
 # withd scaling: Cnn with the double of channels
 class CNN_Width(nn.Module):
     def __init__(self):
@@ -254,8 +253,6 @@ def train(model, train_loader, val_loader, optimizer, criterion, max_epochs, dev
     plt.grid(True)
     
     plt.show()
-
-    
 
 def main():
     # Configuration
